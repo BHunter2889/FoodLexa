@@ -1,0 +1,12 @@
+ProductBrandIntent What is that products brand
+ProductBrandIntent What brand is that
+ProductBrandIntent What brand
+ProductTitleQueryIntent tell me about {hot chocolate | productTitle}
+ProductTitleQueryIntent what do you know about {fish | productTitle}
+ProductTitleQueryIntent what {chips | productTitle} products can you find
+ProductTitleQueryIntent what {pear | productTitle} products do you know about
+ProductTitleQueryIntent about {sausage | productTitle}
+UPCQueryIntent about this UPC {UPC}
+UPCQueryIntent What is the ID for this UPC {UPC}
+UPCQueryIntent this UPC {UPC}
+UPCQueryIntent What do you know about this UPC {UPC}

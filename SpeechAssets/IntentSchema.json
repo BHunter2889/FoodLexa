@@ -1,0 +1,34 @@
+{
+  "intents": [
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "ProductBrandIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "productTitle",
+          "type": "AMAZON.LITERAL"
+        }
+      ],
+      "intent": "ProductTitleQueryIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "UPC",
+          "type": "AMAZON.NUMBER"
+        }
+      ],
+      "intent": "UPCQueryIntent"
+    }
+  ]
+}
