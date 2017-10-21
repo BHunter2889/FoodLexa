@@ -1,18 +1,24 @@
 package com.labelinsight.smartlabel.domain;
 
+import java.util.List;
+
 public class SmartLabelProduct {
     private Integer id;
     private String upc;
     private String brand;
     private String title;
     private String productSize;
+    private String productType;
+    private AllergenSection allergenSection;
 
-    public SmartLabelProduct(Integer id, String upc, String brand, String title, String productSize) {
+    public SmartLabelProduct(Integer id, String upc, String brand, String title, String productSize, String productType, AllergenSection allergenSection) {
         this.id = id;
         this.upc = upc;
         this.brand = brand;
         this.title = title;
         this.productSize = productSize;
+        this.productType = productType;
+        this.allergenSection = allergenSection;
     }
 
     public Integer getId() {
@@ -55,6 +61,22 @@ public class SmartLabelProduct {
         this.productSize = productSize;
     }
 
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public AllergenSection getAllergenSection() {
+        return allergenSection;
+    }
+
+    public void setAllergenSection(AllergenSection allergenSection) {
+        this.allergenSection = allergenSection;
+    }
+
     @Override
     public String toString() {
         return "SmartLabelProduct{" +
@@ -63,6 +85,8 @@ public class SmartLabelProduct {
                 ", brand='" + brand + '\'' +
                 ", title='" + title + '\'' +
                 ", productSize='" + productSize + '\'' +
+                ", productType='" + productType + '\'' +
+                ", allergenSection=" + allergenSection +
                 '}';
     }
 }

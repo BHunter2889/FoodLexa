@@ -1,6 +1,7 @@
 package com.labelinsight.smartlabel;
 
 import com.google.gson.Gson;
+import com.labelinsight.smartlabel.domain.Allergen;
 import com.labelinsight.smartlabel.domain.SmartLabelProduct;
 import com.labelinsight.smartlabel.domain.SmartLabelResponse;
 
@@ -10,7 +11,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class SmartLabelRestService {
     private static final String SL_API_URL = "https://dev-enterprise-sl-api.labelinsight.com/api/v4/20ff77e9-75af-410d-98ff-bef2febb0df7/data/";
@@ -47,6 +50,27 @@ public class SmartLabelRestService {
             return null;
         }
         return smartLabelResponse.getContent();
+    }
+
+    private boolean containsAllergen(SmartLabelProduct smartLabelProduct, String allergen){
+        List<Allergen> allergens = smartLabelProduct.getAllergenSection().getAllergens();
+        for (Allergen allergen1 : allergens) {
+            if(allergen1.getName().equals(allergen) && allergen1.getPresence().equals("Contains")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<SmartLabelProduct> getProductByTitleFilterAllergen(String productTitle, String allergen) throws IOException{
+        List<SmartLabelProduct> products = getProductByTitle(productTitle);
+        List<SmartLabelProduct> whatToRemove = new ArrayList<>();
+            for (SmartLabelProduct product : products) {
+                if (containsAllergen(product, allergen)){
+                        whatToRemove.add(product);
+                }
+            }
+        return products;
     }
 
     private SmartLabelResponse getSmartLabelResponse(StringBuffer response) {
