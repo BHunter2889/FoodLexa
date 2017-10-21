@@ -24,7 +24,7 @@ public class SmartLabelRestService {
 
     private final Gson gson;
 
-    public SmartLabelRestService(){
+    public SmartLabelRestService() {
         gson = new Gson();
     }
 
@@ -34,7 +34,7 @@ public class SmartLabelRestService {
         StringBuffer response = getResponse(httpURLConnection);
 
         SmartLabelResponse smartLabelResponse = getSmartLabelResponse(response);
-        if(smartLabelResponse.getContent().isEmpty()){
+        if (smartLabelResponse.getContent().isEmpty()) {
             return null;
         }
         return smartLabelResponse.getContent().get(0);
@@ -46,31 +46,31 @@ public class SmartLabelRestService {
         StringBuffer response = getResponse(httpURLConnection);
 
         SmartLabelResponse smartLabelResponse = getSmartLabelResponse(response);
-        if(smartLabelResponse.getContent().isEmpty()){
+        if (smartLabelResponse.getContent().isEmpty()) {
             return null;
         }
         return smartLabelResponse.getContent();
     }
 
-    private boolean containsAllergen(SmartLabelProduct smartLabelProduct, String allergen){
+    private boolean containsAllergen(SmartLabelProduct smartLabelProduct, String allergen) {
         List<Allergen> allergens = smartLabelProduct.getAllergenSection().getAllergens();
         for (Allergen allergen1 : allergens) {
-            if(allergen1.getName().equals(allergen) && allergen1.getPresence().equals("Contains")){
+            if (allergen1.getName().equals(allergen) && allergen1.getPresence().equals("Contains")) {
                 return true;
             }
         }
         return false;
     }
 
-    public List<SmartLabelProduct> getProductByTitleFilterAllergen(String productTitle, String allergen) throws IOException{
+    public List<SmartLabelProduct> getProductByTitleFilterAllergen(String productTitle, String allergen) throws IOException {
         List<SmartLabelProduct> products = getProductByTitle(productTitle);
-        List<SmartLabelProduct> whatToRemove = new ArrayList<>();
-            for (SmartLabelProduct product : products) {
-                if (containsAllergen(product, allergen)){
-                        whatToRemove.add(product);
-                }
+        List<SmartLabelProduct> whatToReturn = new ArrayList<>();
+        for (SmartLabelProduct product : products) {
+            if (!containsAllergen(product, allergen)) {
+                whatToReturn.add(product);
             }
-        return products;
+        }
+        return whatToReturn;
     }
 
     private SmartLabelResponse getSmartLabelResponse(StringBuffer response) {
