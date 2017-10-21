@@ -56,7 +56,7 @@ public class SmartLabelRestService {
     private boolean containsAllergen(SmartLabelProduct smartLabelProduct, String allergen) {
         List<Allergen> allergens = smartLabelProduct.getAllergenSection().getAllergens();
         for (Allergen allergen1 : allergens) {
-            if (allergen1.getName().equals(allergen) && allergen1.getPresence() == null) {
+            if (allergen1.getName().toLowerCase().equals(allergen) && allergen1.getPresence() == null) {
                 return false;
             }
         }
@@ -67,7 +67,7 @@ public class SmartLabelRestService {
         List<SmartLabelProduct> products = getProductByTitle(productTitle);
         return products.stream()
                 .filter(smartLabelProduct ->
-                        !containsAllergen(smartLabelProduct, allergen))
+                        !containsAllergen(smartLabelProduct, allergen.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
