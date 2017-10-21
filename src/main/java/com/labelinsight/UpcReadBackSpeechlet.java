@@ -15,6 +15,7 @@ public class UpcReadBackSpeechlet implements Speechlet {
     private static final String PRODUCT_BRAND_INTENT = "ProductBrandIntent";
     private static final String UPC_QUERY_INTENT = "UPCQueryIntent";
     private static final String PRODUCT_TITLE_QUERY_INTENT = "ProductTitleQueryIntent";
+    private static final String ALLERGEN_QUERY_INTENT = "AllergenQueryIntent";
 
     @Override
     public void onSessionStarted(final SessionStartedRequest sessionStartedRequest, final Session session) throws SpeechletException {
@@ -35,17 +36,39 @@ public class UpcReadBackSpeechlet implements Speechlet {
             return getUpcResponse(intent, session);
         } else if(PRODUCT_BRAND_INTENT.equals(intentName)){
             return getBrandResponse(session);
-        } else if(PRODUCT_TITLE_QUERY_INTENT.equals(intentName)){
+        } else if(PRODUCT_TITLE_QUERY_INTENT.equals(intentName)) {
             return getTitleSearchResponse(intent, session);
+        } else if(ALLERGEN_QUERY_INTENT.equals(intentName)) {
+            return getAllergenResponse(intent, session);
         } else {
             throw new SpeechletException("Invalid Intent");
         }
+    }
+
+    private SpeechletResponse getAllergenResponse(Intent intent, Session session) {
+        String allergen = intent.getSlot("allergen").getValue();
+        String title = intent.getSlot("title").getValue();
+        SmartLabelRestService smartLabelRestService = new SmartLabelRestService();
+        try {
+            List<SmartLabelProduct> smartLabelProducts = smartLabelRestService.getProductByTitleFilterAllergen(title, allergen);
+            if(productsPresent(smartLabelProducts)) {
+                return buildSmartLabelProductListResponse(smartLabelProducts);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText("Sorry all " + title + " products contain" + allergen);
+
+        return SpeechletResponse.newTellResponse(speech);
     }
 
     @Override
     public void onSessionEnded(final SessionEndedRequest sessionEndedRequest, final Session session) throws SpeechletException {
 
     }
+
+
 
     private SpeechletResponse getTitleSearchResponse(Intent intent, final Session session) {
         try {
